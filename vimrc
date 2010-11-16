@@ -20,15 +20,14 @@ set autoread
 " Normal behaviour of backspace key
 set backspace=indent,eol,start
 
-" Set terminal to 256 colors
-" set t_Co=256
 " Textmate scheme colors clone
-"colorscheme vividchalk
+colorscheme vividchalk
 " colorscheme vibrantink
 " colorscheme herald
 
 " don't keep backup after close
 set nobackup
+
 " do keep a backup while working
 set writebackup
 " Store temporary files in a central spot
@@ -80,7 +79,6 @@ vnoremap <silent> <S-TAB> <gv
 
 
 " A really status line
-"set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [ASCII=\%03.3b]\ [HEX=\%02.2B]\ [POS=%04l,%04v][%p%%]\ [LEN=%L]
 if &statusline == ''
 	"set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [POS=%04l,%04v][%p%%]\ [LEN=%L]
 	set statusline=[%n]\ %<%.99f\ %h%w%m%r%y%=%-16(\ %l,%c-%v\ %)%P
@@ -139,7 +137,7 @@ nnoremap ' `
 nnoremap ` '
 
 " Keep a longer history
-set history=100
+set history=1000
 
 " Use case-smart searching
 set ignorecase 
@@ -179,7 +177,7 @@ map <F8> :TrinityToggleNERDTree<CR>
 "" NERDtree
 " XXX - Modified in Trinity_InitNERDTree function at line 147 in trinity.vim
 " Set the window width to default
-let g:NERDTreeWinSize = 30
+let g:NERDTreeWinSize = 35
 " Highlight the cursor line
  let g:NERDTreeHighlightCursorline = 1
 
