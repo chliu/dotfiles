@@ -1,0 +1,225 @@
+*vimsy.txt*                    Vimsy                     Version 0.1
+
+              A nice vim-based development environment          *vimsy*
+
+
+
+==============================================================================
+0. Table of Contents                                      *vimsy-contents*
+
+1. |vimsy-plugins|       List of Plugins
+   |vimsy-keys|          How to use Vimsy's features.
+     |vimsy-normal|      All keys mapped in vim's normal mode
+     |vimsy-mapleader|   Normal mode keypresses started with the mapleader
+3. |vimsy-tasks|         A list of common things you might need to do
+4. |vimsy-discussion|    Discussion on some core features and bugs
+5. |vimsy-todo|          A huge list of things to improve
+6. |vimsy-rejplugins|    Why good plugins might not be included
+7. |vimsy-about|         Download new versions, licensing, etc.
+
+
+==============================================================================
+1. Installed Plugins                                      *vimsy-plugins*
+
+
+Full list: |bundles|
+
+Some highlights:
+
+  - |NERDTree|      \d    Navigate an outline view of the files in your filesystem
+  - |NERDCommenter| ^/    Comment and uncomment blocks of source code
+  - |command-t|     C-Space Quickly open files by typing a few letters
+  - |bufexplorer|   ^J    Switch between your open buffers
+  - |taglist|       \l    View and navigate the tags in the curent file
+  - |rails|         :R    Brilliance for Rails developers by the legendary tpope
+  - |rubytest|      \t    Quickly run a single test (\t) or a file of tests (\T)
+  - |snipmate|      TAB   The tab key to inserts Textmate-like snippets
+  - |surround|      ysiw" Quickly surround text objects with quotes and HTML tags
+  - |indexedsearch| /     Shows "Match 4 of 52" when searching with /, ?, *, etc.
+  - |endwise|             Automatically close blocks in ruby, vb, or vimscript
+  - YAIFA                 Detect indent style when opening a file, don't convert it.
+  - matchit and python_match: % bounces between html tags, if/else/end, begin/end, etc.
+
+See |vimsy-rejected-plugins| for the plugins that didn't make the cut.
+
+
+==============================================================================
+2. Quick Feature List                                  *vimsy-features*
+
+  - See |vimsy-keys-features| to see some useful new mappings.
+  - Erroneous trailing whitspace is highlighted
+  - Additional syntax highlighting: haml, sass, cucumber, markdown,
+    textile, git commits, shoulda, jquery.
+  - Restores folds and cursor position when opening a file again
+
+
+==============================================================================
+3. Tasks                                                 *vimsy-tasks*
+
+Tasks:
+
+Create a file or directory
+  - \d (open nerdtree),
+  - put the cursor on the directory to contain the new file
+  - hit m, then follow the menu.  TODO: make it a single keystroke
+
+Move or copy files
+  - \d (open nerdtree)
+  - put the cursor on the directory to contain the new file
+  - hit m, then follow the menu.
+
+
+
+==============================================================================
+4. DISCUSSION                                            *vimsy-discussion*
+
+See also |vimsy-rejected-plugins|.
+
+
+Map Leader                                     *vimsy-mapleader-discussion*
+
+A lot of tutorials recommend changing vim's |mapleader| from "\" to ",".
+Vimsy doesn't do this because changing the mapleader would cause too
+much surprise.  If you want "," to be your mapleader, drop this into
+your ~/.vimrc before including vimsy:
+
+    let mapleader = ","
+    source $HOME/.vim/vimrc
+
+
+Control-/                                                *vimsy-control-/*
+
+This is the one keybinding that all IDEs use to toggle comments.  Vimsy
+supports this, but there's a caveat: most terminals convert Control-/ to
+Control-_, so we also bind toggle-comment to Control-_.  However, Control-_
+is already used to switch RTL/LTR so Hebrew and Farsi developers may find
+this a little surprising.
+
+Furthermore, vim-gtk, vim-gnome, and MacVim are unable to produce Control-/.
+Motif and Athena Vim convert Control-/ to ^_.
+You can test this for yourself:
+  - hit i to enter insert mode, then hit control-V control-/.
+  - if you see "^/" or "^_", your version of Vim can recognize Control-/.
+  - if you see "/", then Control-/ is broken.  You must toggle commenting
+    with Control-_ or <leader>C.
+
+Ubuntu bug: https://bugs.launchpad.net/ubuntu/+source/vim/+bug/534124
+
+
+==============================================================================
+5. TODO                                                   *vimsy-todo*
+
+Make Control-P in insert mode enter paste mode, exit paste mode when you hit esc and return to command mode.
+add http://www.vim.org/scripts//script.php?script_id=2699 and map to ,.  si, should replace a single arg
+what about C stuff?  http://github.com/vim-scripts/c.vim   and   http://github.com/MasterKey/OmniCppComplete ?
+Add ack plugin or something to make searching easier.  Not fond of ack but gotta do something!
+  Add http://github.com/adamlogic/ack.vim/commit/850e83088e0a623390446ea88fc8740857777f25 ?
+does http://www.vim.org/scripts/script.php?script_id=1498 have a good color switcher?
+Like the organizaiton in http://github.com/Frangossauro/startervim/blob/master/vimrc
+Make ESC cancel bufexplorer and return to the previous file being edited, without affecting Control-6.
+  This probably won't work in the terminal.  Also Control-C like command-t does.
+Rails vim -- turn off logfile tweaks.  Coloring makes opening large files painful, plus it breaks 1G, 500G, etc to navigate in the file.
+Also make bufexplorer support s and v to open new buffer horiz or vertically split. (already built-in?)
+bufexplorer: use h and F1 for help and ? to search backward.
+split python_match into its own bundle.  time to mirror vim scripts!
+is easytags worth it?  sounds nice.  http://github.com/xolox/vim-easytags
+nerdtree: use h and F1 for help and ? to search backward.
+nerdtree: I should be able to open bufexplorer and command-t from within nerdtree.
+nerdtree: Make space behave the same as return when navigating the tree.
+nerdtree: Make a keystroke to fire off a grep/ack from the selected directory or parent dir of the selected file
+nerdtree: Add c/n to nerdtree for one-step file creation
+interesting plugin: http://github.com/chrisbra/histwin.vim
+More auto-closing, should probably pick one: http://github.com/Townk/vim-autoclose http://github.com/Raimondi/delimitMate
+What about vim-pastie or vim-gist?
+What about tpope's speed dating?  Seems to be very little downside.  Maybe disabled by default?
+What about yankring?
+What about sparkup or zencoding?
+What about the rename plugin?  And can it call fugitive's Gmove function if called in a git repo?
+Python: pyflakes-vim, indentation at http://www.vim.org/scripts/script.php?script_id=974
+C/C++: a.vim of course!  and cscope http://cscope.sourceforge.net/cscope_vim_tutorial.html
+OCaml: omlet  Clojure: vimclojure  VB.NET: vbnet.vim  TeX: vim-latex
+Making Vim autodetect indent?
+  overview: http://vim.wikia.com/wiki/Set_indent_parameters_for_Python_files
+  vindect 2001-?: python http://code.fluffytapeworm.com/projects   looks kind of crusty.
+  Detect Indent vimscript 2005-2009: http://www.vim.org/scripts/script.php?script_id=1171 http://github.com/ciaranm/detectindent
+  Indent Finder: python http://www.vim.org/scripts/script.php?script_id=513 http://www.freehackers.org/Indent_Finder
+  YAIFA: vimscript http://www.vim.org/scripts/script.php?script_id=3096
+    vimscript and on gitup?  the battle is between Detect Indent and YAIFA.  I'll try YAIFA.
+  Indent Consistency Cop: http://www.vim.org/scripts/script.php?script_id=1690
+
+Wishlist:
+Is it possible to test this whole vimsy mess?  http://www.vim.org/scripts/script.php?script_id=2565 ?
+show matching begin/else/end/etc when moving the cursor
+Add a color switcher and some decent color themes.
+Add :ver N and :hor N (:ht and :wd?) commands to set the vertical and horizontal size of the current window
+Is it possible to make folding completely hands-off?  Maybe http://eigenclass.org/hiki.rb?simplefold+plugin+0.4.0 ?
+Add a way to tell what color is under the cursor?  :echo synIDattr(synID(line('.'),col('.'),1),'name')
+If you ruby-block-conv 'puts "#{var}"', it converts the variable interpolation in the string, not the surrounding block.
+Ruby: keep an eye on rfactor, might be useful one day?
+
+Never?:
+Make HTML/XML tags auto-close?
+  Asked tpope on irc about adding it to endwise: "sounds impossible" to do it with minimal false positives.
+  maybe: Michael Sanders HTML AutoCloseTag: http://www.vim.org/scripts/script.php?script_id=2591
+  or maybe: http://pastey.net/132688-2fb8 or http://github.com/mitechie/pyvim/blob/master/.vim/ftplugin/xml.vim
+  or can I make completion close tags?  </TAB?  Too bad endwise doesn't auto-close HTML tags.
+ruby indentation screws up when I type end_date, it unindents prematurely right after "end".
+  Can't be easily fixed, just keep typing then hit Control-F: http://github.com/vim-ruby/vim-ruby/issues/issue/9
+
+
+==============================================================================
+6. Rejected Plugins            *vimsy-rejplugins*  *vimsy-rejected-plugins*
+
+These are plugins that were considered but not used.  See
+|vimsy-plugins| for the list of currently installed plugins.
+
+camelcasemotion    How often do you need to move within a camelcase word?
+             Is it really worth learning custom move keys over f and b?
+
+fuzzyfinder (original)   So laborious to use that I don't see why anyone
+             would use it over vim's :find built-in.
+
+fuzzyfinder-textmate    Jamis wrote this, then abandoned it when the
+             fuzzyfinder script kept breaking his changes.
+               http://twitter.com/jamis/status/13735390978
+             Vimsy used ff-tm until 5 Aug 2010, when it switched to
+             |command-t|.
+
+lh-cpp       Tries to do too much.  Bracket insertion handled by autoclose,
+             snippets handled by snipmate, rest seems missable.  Except
+             syntax highlighting bad C++ practices, that seems worth
+             extracting into its own plugin.
+
+lusty-explorer Requires more keypresses and more thinking than command-t.
+
+lusty-juggler Strange that it tries cram all open buffers into the status
+             line.  bufexplorer feels nicer and more useful.
+
+rsense       requires java?!
+
+ruby-single-test  Want something that will test files and dirs too.
+
+specky       Includes a bunch of non-rspec-related garbage.  It's hard
+             enough to get vim scripts to reliably coexist as it is,
+             there's no need to bring along unrelated stuff!
+
+vim-rspec    relies on Ruby+hpricot/xsltproc parsing HTML?  Seems rather
+             overcomplex.  Glad I found a simpler alternative.
+
+
+==============================================================================
+7. About                                               *vimsy-about*
+
+Vimsy was assembled by Scott Bronson, brons_vimsy@rinspin.com.
+Its vimrc was written from scratch but cribbed heavily from
+http://vim.wikia.com/wiki/Example_vimrc and Akita's version of
+Scrooloose's vimfiles.
+
+Homepage:     http://github.com/bronson/vimsy
+
+                                                      *vimsy-license*
+Each plugin in vimsy is licensed individually by its author.
+All other content in Vimsy is distributable under the same
+terms as Vim itself.  See |license|.  No warranties, expressed
+or implied.
+
