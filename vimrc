@@ -1,4 +1,11 @@
 set nocompatible
+
+" init pathogen
+
+filetype off 
+call pathogen#helptags()
+call pathogen#runtime_append_all_bundles()
+
 syntax on
 filetype plugin indent on
 set encoding=utf-8
@@ -18,7 +25,7 @@ set backspace=indent,eol,start
 " Textmate scheme colors clone
 "colorscheme vividchalk
 " colorscheme vibrantink
-colorscheme herald
+" colorscheme herald
 
 " don't keep backup after close
 set nobackup

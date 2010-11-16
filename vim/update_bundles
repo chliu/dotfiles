@@ -35,9 +35,9 @@ vim_org_scripts = [
 require 'fileutils'
 require 'open-uri'
 
-bundles_dir = File.join(File.dirname(__FILE__), "bundles")
+bundle_dir = File.join(File.dirname(__FILE__), "bundle")
 
-FileUtils.cd(bundles_dir)
+FileUtils.cd(bundle_dir)
 
 puts "Trashing everything (lookout!)"
 Dir["*"].each {|d| FileUtils.rm_rf d }
