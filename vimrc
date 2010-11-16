@@ -21,7 +21,7 @@ set autoread
 set backspace=indent,eol,start
 
 " Textmate scheme colors clone
-colorscheme vividchalk
+ colorscheme vividchalk
 " colorscheme vibrantink
 " colorscheme herald
 
