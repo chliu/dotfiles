@@ -10,7 +10,6 @@ MAP-d	vimsy-keys.txt	/*MAP-d*
 MAP-l	vimsy-keys.txt	/*MAP-l*
 MAP-star	vimsy-keys.txt	/*MAP-star*
 MAP-w	vimsy-keys.txt	/*MAP-w*
-bundles.txt	bundles.txt	/*bundles.txt*
 vimsy	vimsy.txt	/*vimsy*
 vimsy-about	vimsy.txt	/*vimsy-about*
 vimsy-bracket-motion	vimsy-keys.txt	/*vimsy-bracket-motion*
