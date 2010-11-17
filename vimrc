@@ -17,6 +17,8 @@ set shiftwidth=2
 set softtabstop=2
 set autoread
 
+let mapleader = ","
+
 " Normal behaviour of backspace key
 set backspace=indent,eol,start
 
@@ -248,7 +250,6 @@ let g:vimwiki_list = [{'path': '~/Documents/vimwiki/',
 """"""""""""""""""""""""""""""""""""""""""""""""""
 " let g:ruby_debugger_fast_sender = 1
 
-let mapleader = ","
 
 " Edit the README_FOR_APP (makes :R commands work)
 map <Leader>R :e doc/README_FOR_APP<CR>
@@ -258,7 +259,7 @@ map <Leader>m :Rmodel
 map <Leader>c :Rcontroller
 map <Leader>v :Rview
 map <Leader>u :Runittest
-map <Leader>f :Rfunctionaltest
+" map <Leader>f :Rfunctionaltest
 map <Leader>tm :RTmodel
 map <Leader>tc :RTcontroller
 map <Leader>tv :RTview
