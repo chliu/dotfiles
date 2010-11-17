@@ -1,37 +1,43 @@
 #!/usr/bin/env ruby
 
+#pathogen - to manage all the other plugins neatly
+
+
 git_bundles = [
   "git://github.com/astashov/vim-ruby-debugger.git",
-  "git://github.com/msanders/snipmate.vim.git",
-  "git://github.com/scrooloose/nerdtree.git",
+  "git://github.com/msanders/snipmate.vim.git", #Textmate like snipplet funktion
+  "git://github.com/scrooloose/nerdtree.git", #navigate and manipulate files
   "git://github.com/timcharper/textile.vim.git",
   "git://github.com/tpope/vim-cucumber.git",
-  "git://github.com/tpope/vim-fugitive.git",
+  "git://github.com/tpope/vim-fugitive.git", #lots of Git goodness for Vim
   "git://github.com/tpope/vim-git.git",
   "git://github.com/tpope/vim-haml.git",
   "git://github.com/tpope/vim-markdown.git",
-  "git://github.com/tpope/vim-rails.git",
+  "git://github.com/tpope/vim-rails.git", #various helpers from the vim-ruby project for rails
   "git://github.com/tpope/vim-repeat.git",
-  "git://github.com/tpope/vim-surround.git",
+  "git://github.com/tpope/vim-surround.git", #add, delete and change common pairs easily
+	"git://github.com/tpope/vim-endwise.git", #automagically enter an 'end' as needed in Ruby files
 	"git://github.com/commonthread/vim-vibrantink.git",
   "git://github.com/tpope/vim-vividchalk.git",
   "git://github.com/tsaleh/vim-align.git",
   "git://github.com/tsaleh/vim-shoulda.git",
   "git://github.com/tsaleh/vim-supertab.git",
-  "git://github.com/tsaleh/vim-tcomment.git",
+  "git://github.com/tsaleh/vim-tcomment.git", #a better fuzzy finder for opening files
   "git://github.com/vim-ruby/vim-ruby.git",
+	"git://github.com/bingaman/vim-sparkup.git", #(like Zen Coding, but just seems to work more smoothly with vim)
   "git://repo.or.cz/vcscommand",
+	"git://github.com/marcelinollano/vim-fuzzyfinder.git",
   "git://github.com/vim-bundles/fuzzyfinder.git",
   "git://github.com/borgand/ir_black.git",
 	"git://github.com/chrismetcalf/vim-autocomplpop.git"
 ]
 
 vim_org_scripts = [
-  ["IndexedSearch", "7062", "plugin"],
-  ["gist", "12732", "plugin"],
+  ["IndexedSearch", "7062", "plugin"], #show total count number and current hit for searches
+  ["gist", "12732", "plugin"], #add support for sending buffers to gist or editing gists via Vim
   ["jquery", "12107", "syntax"],
-  ["bufexplorer", "12904", "zip"],
-  ["taglist", "7701", "zip"],
+  ["bufexplorer", "12904", "zip"], #work better with buffers
+  ["taglist", "7701", "zip"], #helpful source code browser
 ]
 
 require 'fileutils'
