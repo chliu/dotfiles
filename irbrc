@@ -2,6 +2,7 @@
 require 'rubygems'
 require 'irb/completion'
 require 'irb/ext/save-history'
+require 'interactive_editor'
 
 IRB.conf[:SAVE_HISTORY] = 1000
 IRB.conf[:HISTORY_FILE] = "#{ENV['HOME']}/.irb_history"
@@ -79,3 +80,21 @@ alias c clear
 
 load File.dirname(__FILE__) + '/.railsrc' if $0 == 'irb' && ENV['RAILS_ENV']
 
+class << self
+  def vi(name=nil)
+     InteractiveEditor.edit('/Applications/MacVim.app/Contents/MacOS/Vim', name)
+  end
+
+  def vim(name=nil)
+     InteractiveEditor.edit('/Applications/MacVim.app/Contents/MacOS/Vim', name)
+  end
+
+  def gvim(name=nil)
+    InteractiveEditor.edit('/Applications/MacVim.app/Contents/MacOS/Vim -g -f', name)
+  end
+  
+  def mate(name=nil)
+    InteractiveEditor.edit('mate -w', name)
+  end
+
+end

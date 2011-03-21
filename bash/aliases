@@ -19,5 +19,22 @@ alias vi='/Applications/MacVim.app/Contents/MacOS/Vim'
 alias gvim='/Applications/MacVim.app/Contents/MacOS/MacVim'
 alias authplain="printf '\!:1\0\!:1\0\!:2' | mmencode | tr -d '\n' | sed 's/^/AUTH PLAIN /'"
 
+if [[ -s ~/.rvm/scripts/rvm ]] ; then source ~/.rvm/scripts/rvm ; fi
 
-#if [[ -s ~/.rvm/scripts/rvm ]] ; then source ~/.rvm/scripts/rvm ; fi
+
+alias c='clear'
+alias ls='ls -alh'
+alias cdd='cd -'
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias .....='cd ../../../..'
+alias ......='cd ../../../../..'
+
+if ls --color -d . >/dev/null 2>&1; then
+  alias ls='ls --color=auto'  # Linux
+elif ls -G -d . >/dev/null 2>&1; then
+  alias ls='ls -G'  # BSD/OS X
+fi
+
+

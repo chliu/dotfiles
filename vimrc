@@ -16,6 +16,7 @@ set tabstop=2
 set shiftwidth=2
 set softtabstop=2
 set autoread
+" set paste
 
 let mapleader = ","
 
@@ -87,13 +88,18 @@ if &statusline == ''
 end
 set laststatus=2
 
+"set statusline=%<%f%h%m%r%=%b\ 0x%B\ \ %l,%c%V\ %P
+ 
+set statusline=%f\%h%1*%m%r%w%0*[%{strlen(&filetype)?&filetype:'none'},%{&encoding},%{&fileformat}]\ %b\ 0x%B\ %=%(%l,%c%V%)\ %<%p%%\ [%L]\ \ %{strftime('%H:%M\ %m-%d\ %A')}
+
 
 " Toggle paste mode
 nmap <silent> <F2> :set invpaste<CR>:set paste?<CR>
 " Toggle Highlight search - deprecated now I use :nohl
 "nmap <silent> <F3> :set invhls<CR>:set hls?<CR>
 " Toggle List 
-set listchars=tab:>-,trail:·,eol:$
+" set listchars=tab:>-,trail:·,eol:$
+set listchars=tab:▸\ ,eol:¬
 nmap <silent> <F3> :set invlist<CR>:set list?<CR>
 " set text wrapping toggles
 nmap <silent> <F4> :set invwrap<CR>:set wrap?<CR>
@@ -273,8 +279,17 @@ map <Leader>sf :RSfunctionaltest
 
 
 " Hard to type ******
-imap uu _
-imap hh =>
-imap aa @
+"imap uu _
+"imap hh =>
+"imap aa @
 
+let g:acp_behaviorSnipmateLength = 1
+let g:acp_behaviorKeywordLength = 1 
+
+
+" tcomment keymap
+vnoremap gc :TComment
+vnoremap ,c :TComment
+nmap ,c gcc
+vmap # :TComment<CR>
 
