@@ -3,6 +3,7 @@ require 'rubygems'
 require 'irb/completion'
 require 'irb/ext/save-history'
 require 'interactive_editor'
+require 'looksee'
 
 IRB.conf[:SAVE_HISTORY] = 1000
 IRB.conf[:HISTORY_FILE] = "#{ENV['HOME']}/.irb_history"

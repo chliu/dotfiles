@@ -1,7 +1,6 @@
 set nocompatible
 
 " init pathogen
-
 filetype off 
 call pathogen#helptags()
 call pathogen#runtime_append_all_bundles()
@@ -19,14 +18,16 @@ set autoread
 " set paste
 
 let mapleader = ","
+let g:mapleader = ","
 
 " Normal behaviour of backspace key
 set backspace=indent,eol,start
 
 " Textmate scheme colors clone
 " colorscheme vividchalk
- colorscheme vibrantink
+  colorscheme vibrantink
 " colorscheme herald
+" colorscheme jellybeans
 
 " don't keep backup after close
 set nobackup
@@ -81,16 +82,164 @@ vnoremap <silent> <TAB> >gv
 vnoremap <silent> <S-TAB> <gv
 
 
-" A really status line
-if &statusline == ''
-	"set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [POS=%04l,%04v][%p%%]\ [LEN=%L]
-	set statusline=[%n]\ %<%.99f\ %h%w%m%r%y%=%-16(\ %l,%c-%v\ %)%P
-end
+"statusline setup
+set statusline=%f "tail of the filename
+
+"display a warning if fileformat isnt unix
+set statusline+=%#warningmsg#
+set statusline+=%{&ff!='unix'?'['.&ff.']':''}
+set statusline+=%*
+
+"display a warning if file encoding isnt utf-8
+set statusline+=%#warningmsg#
+set statusline+=%{(&fenc!='utf-8'&&&fenc!='')?'['.&fenc.']':''}
+set statusline+=%*
+
+set statusline+=%h "help file flag
+set statusline+=%y "filetype
+set statusline+=%r "read only flag
+set statusline+=%m "modified flag
+
+"display a warning if &et is wrong, or we have mixed-indenting
+set statusline+=%#error#
+set statusline+=%{StatuslineTabWarning()}
+set statusline+=%*
+
+set statusline+=%{StatuslineTrailingSpaceWarning()}
+
+set statusline+=%{StatuslineLongLineWarning()}
+
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+"display a warning if &paste is set
+set statusline+=%#error#
+set statusline+=%{&paste?'[paste]':''}
+set statusline+=%*
+
+set statusline+=%= "left/right separator
+set statusline+=%{StatuslineCurrentHighlight()}\ \ "current highlight
+set statusline+=%c, "cursor column
+set statusline+=%l/%L "cursor line/total lines
+set statusline+=\ %P "percent through file
 set laststatus=2
 
-"set statusline=%<%f%h%m%r%=%b\ 0x%B\ \ %l,%c%V\ %P
- 
-set statusline=%f\%h%1*%m%r%w%0*[%{strlen(&filetype)?&filetype:'none'},%{&encoding},%{&fileformat}]\ %b\ 0x%B\ %=%(%l,%c%V%)\ %<%p%%\ [%L]\ \ %{strftime('%H:%M\ %m-%d\ %A')}
+"display a warning if fileformat isnt unix
+set statusline+=%#warningmsg#
+set statusline+=%{&ff!='unix'?'['.&ff.']':''}
+set statusline+=%*
+
+"return '[\s]' if trailing white space is detected
+"return '' otherwise
+function! StatuslineTrailingSpaceWarning()
+    if !exists("b:statusline_trailing_space_warning")
+        if search('\s\+$', 'nw') != 0
+            let b:statusline_trailing_space_warning = '[\s]'
+        else
+            let b:statusline_trailing_space_warning = ''
+        endif
+    endif
+    return b:statusline_trailing_space_warning
+endfunction
+
+
+"return the syntax highlight group under the cursor ''
+function! StatuslineCurrentHighlight()
+    let name = synIDattr(synID(line('.'),col('.'),1),'name')
+    if name == ''
+        return ''
+    else
+        return '[' . name . ']'
+    endif
+endfunction
+
+"recalculate the tab warning flag when idle and after writing
+autocmd cursorhold,bufwritepost * unlet! b:statusline_tab_warning
+
+"return '[&et]' if &et is set wrong
+"return '[mixed-indenting]' if spaces and tabs are used to indent
+"return an empty string if everything is fine
+function! StatuslineTabWarning()
+    if !exists("b:statusline_tab_warning")
+        let tabs = search('^\t', 'nw') != 0
+        let spaces = search('^ ', 'nw') != 0
+
+        if tabs && spaces
+            let b:statusline_tab_warning = '[mixed-indenting]'
+        elseif (spaces && !&et) || (tabs && &et)
+            let b:statusline_tab_warning = '[&et]'
+        else
+            let b:statusline_tab_warning = ''
+        endif
+    endif
+    return b:statusline_tab_warning
+endfunction
+
+"recalculate the long line warning when idle and after saving
+autocmd cursorhold,bufwritepost * unlet! b:statusline_long_line_warning
+
+"return a warning for "long lines" where "long" is either &textwidth or 80 (if
+"no &textwidth is set)
+"
+"return '' if no long lines
+"return '[#x,my,$z] if long lines are found, were x is the number of long
+"lines, y is the median length of the long lines and z is the length of the
+"longest line
+function! StatuslineLongLineWarning()
+    if !exists("b:statusline_long_line_warning")
+        let long_line_lens = s:LongLines()
+
+        if len(long_line_lens) > 0
+            let b:statusline_long_line_warning = "[" .
+                        \ '#' . len(long_line_lens) . "," .
+                        \ 'm' . s:Median(long_line_lens) . "," .
+                        \ '$' . max(long_line_lens) . "]"
+        else
+            let b:statusline_long_line_warning = ""
+        endif
+    endif
+    return b:statusline_long_line_warning
+endfunction
+
+
+"return a list containing the lengths of the long lines in this buffer
+function! s:LongLines()
+    let threshold = (&tw ? &tw : 80)
+    let spaces = repeat(" ", &ts)
+
+    let long_line_lens = []
+
+    let i = 1
+    while i <= line("$")
+        let len = strlen(substitute(getline(i), '\t', spaces, 'g'))
+        if len > threshold
+            call add(long_line_lens, len)
+        endif
+        let i += 1
+    endwhile
+
+    return long_line_lens
+endfunction
+
+"find the median of the given array of numbers
+function! s:Median(nums)
+    let nums = sort(a:nums)
+    let l = len(nums)
+
+    if l % 2 == 1
+        let i = (l-1) / 2
+        return nums[i]
+    else
+        return (nums[l/2] + nums[(l/2)-1]) / 2
+    endif
+endfunction
+
+"syntastic settings
+let g:syntastic_enable_signs=1
+let g:syntastic_auto_loc_list=2
+
+
 
 
 " Toggle paste mode
@@ -129,9 +278,13 @@ endfunction
 
 
 
+let g:rubycomplete_rails = 1
 autocmd FileType ruby,eruby set omnifunc=rubycomplete#Complete
 autocmd FileType ruby,eruby let g:rubycomplete_buffer_loading = 1
+autocmd FileType ruby,eruby let g:rubycomplete_rails = 1
 autocmd FileType ruby,eruby let g:rubycomplete_classes_in_global = 1
+autocmd FileType ruby,eruby let g:rubycomplete_include_object = 1
+autocmd FileType ruby,eruby let g:rubycomplete_include_objectspace = 1
 map <leader>mr <ESC>:rubyf %<CR>
 
 
@@ -172,29 +325,15 @@ set wildmode=longest,full
 set diffopt+=iwhite             " ignore whitespace in diff mode
 
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Trinity																			                  "
-" This small plugin is just an IDE manager to control the three "
-" plugins(NERDtree, Source Explorer and Taglist)                "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-map <F5> :TrinityToggleAll<CR>
-map <F6> :TrinityToggleSourceExplorer<CR>
-map <F7> :TrinityToggleTagList<CR>
-map <F8> :TrinityToggleNERDTree<CR>
-
-"" NERDtree
-" XXX - Modified in Trinity_InitNERDTree function at line 147 in trinity.vim
-" Set the window width to default
-let g:NERDTreeWinSize = 35
-" Highlight the cursor line
- let g:NERDTreeHighlightCursorline = 1
-
-"" TagList
-"
-" Sort type by order(default) or name
-" XXX - Modified in Trinity_InitNERDTree function at line 93 in trinity.vim
-"let Tlist_Sort_Type = 'name'
-
+"""""""""""""""""""""""""""""""""""""""""""""""""
+" NERDTree
+"""""""""""""""""""""""""""""""""""""""""""""""""
+let NERDChristmasTree = 1
+let NERDTreeHighlightCursorline = 1
+let NERDTreeShowBookmarks = 1
+let NERDTreeShowHidden = 1
+let NERDTreeIgnore = ['.vim$', '\~$', '.svn$', '\.git$', '.DS_Store', '.sass-cache']
+nmap <leader>w :NERDTreeToggle<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""
 " FuzzyFinder                                   "
@@ -232,8 +371,8 @@ let g:gist_browser_command = 'firefox %URL% &'
 """"""""""""""""""""""""""""""""""""""""""""""""""
 " Snipmate with AutoComplPop(acp)                "
 """"""""""""""""""""""""""""""""""""""""""""""""""
-let g:acp_behaviorSnipmateLength = 1
-let g:acp_ignorecaseOption = 0
+"let g:acp_behaviorSnipmateLength = 1
+"let g:acp_ignorecaseOption = 0
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""
@@ -242,13 +381,14 @@ let g:acp_ignorecaseOption = 0
 " controlled by CVS, SVN, SVK, git, bzr, and hg. "
 """"""""""""""""""""""""""""""""""""""""""""""""""
 " Remove detault mappings
-let VCSCommandDisableMappings=1
+" let VCSCommandDisableMappings=1
 
 """"""""""""""""""""""""""""""""""""""""""""""""""
 " Vimwiki                                        "
 """"""""""""""""""""""""""""""""""""""""""""""""""
-let g:vimwiki_list = [{'path': '~/Documents/vimwiki/',
-			\ 'path_html': '~/Documents/vimwiki_html/'}]
+
+"let g:vimwiki_list = [{'path': '~/Documents/vimwiki/',
+"			\ 'path_html': '~/Documents/vimwiki_html/'}]
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""
@@ -256,40 +396,42 @@ let g:vimwiki_list = [{'path': '~/Documents/vimwiki/',
 """"""""""""""""""""""""""""""""""""""""""""""""""
 " let g:ruby_debugger_fast_sender = 1
 
-
 " Edit the README_FOR_APP (makes :R commands work)
-map <Leader>R :e doc/README_FOR_APP<CR>
+" map <Leader>R :e doc/README_FOR_APP<CR>
 
-" Leader shortcuts for Rails commands
+""""""""""""""""""""""""""""""""""""""""""""""""""
+" Rails 																				 "
+""""""""""""""""""""""""""""""""""""""""""""""""""
 map <Leader>m :Rmodel
 map <Leader>c :Rcontroller
 map <Leader>v :Rview
-map <Leader>u :Runittest
-" map <Leader>f :Rfunctionaltest
-map <Leader>tm :RTmodel
-map <Leader>tc :RTcontroller
-map <Leader>tv :RTview
-map <Leader>tu :RTunittest
-map <Leader>tf :RTfunctionaltest
-map <Leader>sm :RSmodel
-map <Leader>sc :RScontroller
-map <Leader>sv :RSview
-map <Leader>su :RSunittest
-map <Leader>sf :RSfunctionaltest 
-
-
+"map <Leader>u :Runittest
+"map <Leader>tm :RTmodel
+"map <Leader>tc :RTcontroller
+"map <Leader>tv :RTview
+"map <Leader>tu :RTunittest
+"map <Leader>tf :RTfunctionaltest
+"map <Leader>sm :RSmodel
+"map <Leader>sc :RScontroller
+"map <Leader>sv :RSview
+"map <Leader>su :RSunittest
+"map <Leader>sf :RSfunctionaltest 
 " Hard to type ******
-"imap uu _
-"imap hh =>
-"imap aa @
+imap uu _
+imap hh =>
+imap aa @
 
-let g:acp_behaviorSnipmateLength = 1
-let g:acp_behaviorKeywordLength = 1 
+"make <c-l> clear the highlight as well as redraw
+nnoremap <C-L> :nohls<CR><C-L>
+inoremap <C-L> <C-O>:nohls<CR>
+
+"map Q to something useful
+noremap Q gq
+
+map <Leader>n :set nopaste
+map <Leader>p :set paste<CR>i
 
 
-" tcomment keymap
-vnoremap gc :TComment
-vnoremap ,c :TComment
-nmap ,c gcc
-vmap # :TComment<CR>
+
+
 

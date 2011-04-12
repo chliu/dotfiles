@@ -33,10 +33,20 @@ git_bundles = [
 	"git://github.com/marcelinollano/vim-fuzzyfinder.git",
   "git://github.com/vim-bundles/fuzzyfinder.git",
   "git://github.com/borgand/ir_black.git",
-	"git://github.com/chrismetcalf/vim-autocomplpop.git",
+	"git://github.com/nanotech/jellybeans.vim.git",
+	#
+	#Syntastic is a syntax checking plugin that runs buffers through external syntax
+	#checkers as they are saved and opened. If syntax errors are detected, the user
+	#is notified and is happy because they didn't have to compile their code or
+	#execute their script to find them.
+	#
+	"git://github.com/scrooloose/syntastic.git",
+	#not useful
+  #"git://github.com/chrismetcalf/vim-autocomplpop.git",
 	#Conque is a Vim plugin which allows you to run interactive programs, such as bash on linux or powershell.exe on Windows, inside a Vim buffer. In other words it is a terminal emulator which uses a Vim buffer to display the program output. 
 	"git://github.com/chrismetcalf/vim-conque.git"
 #	"git://github.com/Shougo/neocomplcache"
+
 ]
 
 vim_org_scripts = [
