@@ -55,3 +55,11 @@ require("supermaven-nvim").setup({
     return false
   end -- condition to check for stopping supermaven, `true` means to stop supermaven when the condition is true.
 })
+
+require("nvim-tree").setup({
+  view = {
+    width = {
+      max = -1, -- Expands to fit longest filename
+    },
+  },
+})

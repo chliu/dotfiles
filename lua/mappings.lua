@@ -13,3 +13,4 @@ map("v","<space>x",":lua<CR>")
 -- Quick Save and Quit
 map("n", "<leader>w", ":w<CR>")
 map("n", "<leader>q", ":q<CR>")
+
